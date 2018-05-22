@@ -1,8 +1,6 @@
 package ru.webgrozny.restapitester.view;
 
 import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.datatransfer.*;
