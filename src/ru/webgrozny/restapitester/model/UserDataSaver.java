@@ -46,7 +46,7 @@ public class UserDataSaver {
         try (FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
             StringBuilder flatHeaders = new StringBuilder();
             for(String header : headers) {
-                flatHeaders.append(header.replace("@", "--atSymbol--") + "--newLine--");
+                flatHeaders.append(header.replace("@", "--atSymbol--").trim() + "--newLine--");
             }
             fileOutputStream.write( (methodIndex + "@" + host + "@" + flatHeaders.toString() + "\r\n").getBytes());
             fileOutputStream.write(json.getBytes());

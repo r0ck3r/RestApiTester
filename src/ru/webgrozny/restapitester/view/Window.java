@@ -11,34 +11,36 @@ public class Window extends JFrame {
     public JButton jButtonSend = new JButton("Send");
     public JComboBox<String> jComboBoxMethod = new JComboBox<String>();
     public JTextArea jTextAreaHeaders = new JTextArea();
-    public JButton jButtonResetHeaders = new JButton("Reset");
+    public JButton jButtonResetHeaders = new JButton("Restore default");
+    public JTextArea jTextAreaResponseHeaders = new JTextArea();
     private JLabel jLabelHost = new JLabel("API URL:");
     private JLabel jLabelInput = new JLabel("Input JSON:");
     private JLabel jLabelResult = new JLabel("Answer from Server:");
     private JLabel jLabelMethod = new JLabel("Method:");
     private JLabel jLabelHeaders = new JLabel("Headers:");
+    private JLabel jLabelResponseHeaders = new JLabel("Response headers:");
     private JScrollPane jScrollPaneResult = new JScrollPane(jTextFieldResult);
     private JScrollPane jScrollPaneInput = new JScrollPane(jTextAreaInputJson);
     private JScrollPane jScrollPaneHeaders = new JScrollPane(jTextAreaHeaders);
+    private JScrollPane jScrollPaneResponseHeaders = new JScrollPane(jTextAreaResponseHeaders);
     private GridBagLayout layoutManager;
+    private JPanel jPanelTop = new JPanel();
 
     public Window() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(400, 400);
+        setSize(700, 600);
 
         setPosition();
 
         setTitle("RestApiTester");
         jTextFieldResult.setEditable(false);
+        jTextAreaResponseHeaders.setEditable(false);
 
         layoutManager = new GridBagLayout();
         setLayout(layoutManager);
 
-        add(jTextFieldHost);
         add(jScrollPaneInput);
-        add(jButtonSend);
         add(jScrollPaneResult);
-        add(jLabelHost);
         add(jLabelInput);
         add(jLabelResult);
         add(jComboBoxMethod);
@@ -46,16 +48,23 @@ public class Window extends JFrame {
         add(jLabelHeaders);
         add(jScrollPaneHeaders);
         add(jButtonResetHeaders);
+        add(jLabelResponseHeaders);
+        add(jScrollPaneResponseHeaders);
+        add(jPanelTop);
 
+        setTopPaneConstraints();
         setConstraints();
 
         setContextMenuListener(jTextAreaInputJson);
         setContextMenuListener(jTextFieldResult);
         setContextMenuListener(jTextFieldHost);
+        setContextMenuListener(jTextAreaResponseHeaders);
+        setContextMenuListener(jTextAreaHeaders);
 
         jScrollPaneInput.setPreferredSize(new Dimension(0, 0));
         jScrollPaneResult.setPreferredSize(new Dimension(0, 0));
         jScrollPaneHeaders.setPreferredSize(new Dimension(0, 0));
+        jScrollPaneResponseHeaders.setPreferredSize(new Dimension(0, 0));
     }
 
     private void setPosition() {
@@ -74,9 +83,15 @@ public class Window extends JFrame {
         new ContextMenu(jTextComponent);
     }
 
-    private void setConstraints() {
-        GridBagConstraints gridBagConstraints;
+    private void setTopPaneConstraints() {
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        jPanelTop.setLayout(gridBagLayout);
 
+        jPanelTop.add(jLabelHost);
+        jPanelTop.add(jTextFieldHost);
+        jPanelTop.add(jButtonSend);
+
+        GridBagConstraints gridBagConstraints;
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -85,7 +100,7 @@ public class Window extends JFrame {
         gridBagConstraints.weightx = 0.0;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        layoutManager.setConstraints(jLabelHost, gridBagConstraints);
+        gridBagLayout.setConstraints(jLabelHost, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -95,7 +110,7 @@ public class Window extends JFrame {
         gridBagConstraints.weighty = 0.0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        layoutManager.setConstraints(jTextFieldHost, gridBagConstraints);
+        gridBagLayout.setConstraints(jTextFieldHost, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -103,8 +118,22 @@ public class Window extends JFrame {
         gridBagConstraints.gridwidth = 1;
         gridBagConstraints.weighty = 0.0;
         gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        layoutManager.setConstraints(jButtonSend, gridBagConstraints);
+        gridBagLayout.setConstraints(jButtonSend, gridBagConstraints);
+    }
+
+    private void setConstraints() {
+        GridBagConstraints gridBagConstraints;
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        layoutManager.setConstraints(jPanelTop, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -127,7 +156,7 @@ public class Window extends JFrame {
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.weighty = 0.0;
         gridBagConstraints.weightx = 0.0;
@@ -137,7 +166,7 @@ public class Window extends JFrame {
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.weighty = 0.3;
         gridBagConstraints.weightx = 0.0;
@@ -147,7 +176,7 @@ public class Window extends JFrame {
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.weighty = 0.0;
         gridBagConstraints.weightx = 0.0;
@@ -156,18 +185,38 @@ public class Window extends JFrame {
         layoutManager.setConstraints(jLabelHeaders, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.weighty = 0.3;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        layoutManager.setConstraints(jLabelResponseHeaders, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 0.5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         layoutManager.setConstraints(jScrollPaneHeaders, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
+        layoutManager.setConstraints(jScrollPaneResponseHeaders, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.weightx = 0.0;
         gridBagConstraints.weighty = 0.0;
@@ -176,8 +225,8 @@ public class Window extends JFrame {
         layoutManager.setConstraints(jButtonResetHeaders, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.weighty = 0.0;
         gridBagConstraints.weightx = 0.0;
@@ -186,11 +235,11 @@ public class Window extends JFrame {
         layoutManager.setConstraints(jLabelResult, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weighty = 0.3;
-        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 5, 5, 5);
         layoutManager.setConstraints(jScrollPaneResult, gridBagConstraints);

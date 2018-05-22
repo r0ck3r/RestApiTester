@@ -85,12 +85,17 @@ public class Controller {
         window.jTextAreaHeaders.setText(stringBuilder.toString());
     }
 
+    private void setResponseHeaders(String responseHeaders) {
+        window.jTextAreaResponseHeaders.setText(responseHeaders);
+    }
+
     private Thread sendJson() {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 ServerAnswer result = new PostJsonSender().send(getHost(), getInputText(), getMethodIndex(), getHeaders());
                 setResultText(result.getContent());
+                setResponseHeaders(result.getHeaders());
             }
         };
         return new Thread(runnable);

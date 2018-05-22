@@ -117,6 +117,11 @@ public class ContextMenu {
         } else {
             selectAll.setEnabled(true);
         }
+        if(!jTextComponent.isEditable()) {
+            cut.setEnabled(false);
+            paste.setEnabled(false);
+            delete.setEnabled(false);
+        }
     }
 
     private String getClipboardString() {
