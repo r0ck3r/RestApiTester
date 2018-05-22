@@ -15,6 +15,9 @@ public class PostJsonSender {
     public static List<String> methods = Arrays.asList(new String[] {"POST", "PUT"} );
 
     public ServerAnswer send(String host, String json, int methodIndex, String headers) {
+        if(host.length() == 0) {
+            return new ServerAnswer("Host is not defined!", "");
+        }
         String content;
         StringBuilder responseHeaders = new StringBuilder();
         List<String> usingHeaders = defaultHeaders;
@@ -73,7 +76,7 @@ public class PostJsonSender {
             httpURLConnection.disconnect();
             UserDataSaver.getInstance().saveData(host, json, methodIndex, usingHeaders);
         } catch (Exception e) {
-            content = "Can't connect to \"" + host + "\"\r\n" + e.getMessage();
+            content = "Can't connect to \"" + host + "\"\r\n";
         }
         return new ServerAnswer(content, responseHeaders.toString());
     }
