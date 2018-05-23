@@ -13,15 +13,7 @@ public class ServerAnswer {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public String getHeaders() {
         return headers;
-    }
-
-    public void setHeaders(String headers) {
-        this.headers = headers;
     }
 }

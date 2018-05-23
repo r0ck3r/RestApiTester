@@ -5,6 +5,8 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 
 public class Window extends JFrame {
+    public static final int TAB_SIZE = 4;
+
     public JTextArea jTextAreaInputJson = new JTextArea();
     public JTextField jTextFieldHost = new JTextField();
     public JTextArea jTextAreaResult = new JTextArea();
@@ -49,14 +51,8 @@ public class Window extends JFrame {
         add(jPanelTop);
         add(jSplitPane);
 
-        JPanel topSubPanel = createTopJSplitPane();
-        JPanel bottomSubPanel = createBottomJSplitPane();
-
-        jSplitPane.add(topSubPanel);
-        jSplitPane.add(bottomSubPanel);
-        int max = jSplitPane.getMaximumDividerLocation();
-        int min = jSplitPane.getMinimumDividerLocation();
-        int size = jSplitPane.getDividerSize();
+        jSplitPane.add(createTopJSplitPane());
+        jSplitPane.add(createBottomJSplitPane());
 
         setTopPaneConstraints();
         setConstraints();
@@ -71,6 +67,25 @@ public class Window extends JFrame {
         jScrollPaneResult.setPreferredSize(new Dimension(0, 0));
         jScrollPaneHeaders.setPreferredSize(new Dimension(0, 0));
         jScrollPaneResponseHeaders.setPreferredSize(new Dimension(0, 0));
+
+        fixTextAreaFonts();
+    }
+
+    private void fixTextAreaFonts() {
+        Font set = jTextFieldHost.getFont();
+        Font font = new Font(Font.MONOSPACED, 0, set.getSize());
+
+        jTextAreaInputJson.setTabSize(4);
+        jTextAreaInputJson.setFont(font);
+
+        jTextAreaHeaders.setTabSize(TAB_SIZE);
+        jTextAreaHeaders.setFont(font);
+
+        jTextAreaResponseHeaders.setTabSize(4);
+        jTextAreaResponseHeaders.setFont(font);
+
+        jTextAreaResult.setTabSize(4);
+        jTextAreaResult.setFont(font);
     }
 
     private void setPosition() {
@@ -325,5 +340,9 @@ public class Window extends JFrame {
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         layoutManager.setConstraints(jSplitPane, gridBagConstraints);
+    }
+
+    static {
+        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {}
     }
 }
