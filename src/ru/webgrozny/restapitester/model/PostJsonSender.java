@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +73,7 @@ public class PostJsonSender {
             while ( (read = inputStream.read(buffer)) > 0 ) {
                 byteArrayOutputStream.write(buffer, 0, read);
             }
-            content = new String(byteArrayOutputStream.toByteArray());
+            content = new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
             httpURLConnection.disconnect();
             UserDataSaver.getInstance().saveData(host, json, methodIndex, usingHeaders);
         } catch (Exception e) {

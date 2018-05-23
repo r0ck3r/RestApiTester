@@ -5,12 +5,20 @@ import ru.webgrozny.restapitester.model.ServerAnswer;
 import ru.webgrozny.restapitester.model.UserDataSaver;
 import ru.webgrozny.restapitester.view.Window;
 
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.List;
 
 public class Controller {
     Window window = new Window();
+    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
     public void start() {
         window.setVisible(true);
@@ -26,6 +34,7 @@ public class Controller {
         window.jButtonSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setEnabledTextFields(false);
                 setResultText("Retrieving info...");
                 sendJson().start();
             }
@@ -37,6 +46,47 @@ public class Controller {
                 setHeaders(PostJsonSender.defaultHeaders);
             }
         });
+
+        window.jButtonClearAndPasteInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String content = getInputText();
+                try {
+                    content = (String) clipboard.getData(DataFlavor.stringFlavor);
+                } catch (UnsupportedFlavorException e1) {
+
+                } catch (IOException e1) {
+
+                }
+                setInputJson(content);
+            }
+        });
+
+        window.jButtonCopyResponseHeaders.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StringSelection content = new StringSelection(getResponseHeaders());
+                clipboard.setContents(content, null);
+            }
+        });
+
+        window.jButtonCopyResponseContent.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StringSelection content = new StringSelection(getResultText());
+                clipboard.setContents(content, null);
+            }
+        });
+    }
+
+    private JTextComponent[] getFields () {
+        return new JTextComponent[] {window.jTextFieldResult, window.jTextAreaResponseHeaders};
+    }
+
+    private void setEnabledTextFields(boolean enable) {
+        for(JTextComponent component : getFields()) {
+            component.setEnabled(enable);
+        }
     }
 
     private void setRequestMethods() {
@@ -59,6 +109,14 @@ public class Controller {
 
     private String getHeaders() {
         return window.jTextAreaHeaders.getText();
+    }
+
+    private String getResponseHeaders() {
+        return window.jTextAreaResponseHeaders.getText();
+    }
+
+    private String getResultText() {
+        return window.jTextFieldResult.getText();
     }
 
     private void setResultText(String text) {
@@ -96,6 +154,7 @@ public class Controller {
                 ServerAnswer result = new PostJsonSender().send(getHost(), getInputText(), getMethodIndex(), getHeaders());
                 setResultText(result.getContent());
                 setResponseHeaders(result.getHeaders());
+                setEnabledTextFields(true);
             }
         };
         return new Thread(runnable);

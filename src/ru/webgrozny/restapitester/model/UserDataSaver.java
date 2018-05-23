@@ -1,6 +1,7 @@
 package ru.webgrozny.restapitester.model;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class UserDataSaver {
     private static final String FILE_NAME = ".RestApiTester";
     private static UserDataSaver userDataSaver;
 
-    private String userDir = System.getProperty("user.dir");
+    private String userDir = System.getProperty("user.home");
     private String filePath = userDir + "/" + FILE_NAME;
     private String hostFromFile = "";
     private String jsonFromFile = "";
@@ -22,7 +23,7 @@ public class UserDataSaver {
             while ( (c = fileInputStream.read()) != -1 ) {
                 content.write(c);
             }
-            String stringContent = new String(content.toByteArray());
+            String stringContent = new String(content.toByteArray(), Charset.forName("UTF-8"));
             int newLineIndex = stringContent.indexOf("\r\n");
             if(newLineIndex != -1) {
                 String[] savedData = stringContent.substring(0, newLineIndex).split("@");
@@ -49,7 +50,7 @@ public class UserDataSaver {
                 flatHeaders.append(header.replace("@", "--atSymbol--").trim() + "--newLine--");
             }
             fileOutputStream.write( (methodIndex + "@" + host + "@" + flatHeaders.toString() + "\r\n").getBytes());
-            fileOutputStream.write(json.getBytes());
+            fileOutputStream.write(json.getBytes(Charset.forName("UTF-8")));
         } catch (FileNotFoundException e) {
 
         } catch (IOException e) {

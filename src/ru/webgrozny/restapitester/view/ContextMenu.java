@@ -45,6 +45,7 @@ public class ContextMenu {
 
     public void initMenu() {
         jPopupMenu.add(selectAll);
+        jPopupMenu.addSeparator();
         jPopupMenu.add(cut);
         jPopupMenu.add(copy);
         jPopupMenu.add(paste);

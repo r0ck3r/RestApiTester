@@ -13,6 +13,9 @@ public class Window extends JFrame {
     public JTextArea jTextAreaHeaders = new JTextArea();
     public JButton jButtonResetHeaders = new JButton("Restore default");
     public JTextArea jTextAreaResponseHeaders = new JTextArea();
+    public JButton jButtonCopyResponseHeaders = new JButton("Copy");
+    public JButton jButtonCopyResponseContent = new JButton("Copy");
+    public JButton jButtonClearAndPasteInput = new JButton("Clear and paste");
     private JLabel jLabelHost = new JLabel("API URL:");
     private JLabel jLabelInput = new JLabel("Input JSON:");
     private JLabel jLabelResult = new JLabel("Answer from Server:");
@@ -51,6 +54,9 @@ public class Window extends JFrame {
         add(jLabelResponseHeaders);
         add(jScrollPaneResponseHeaders);
         add(jPanelTop);
+        add(jButtonCopyResponseHeaders);
+        add(jButtonCopyResponseContent);
+        add(jButtonClearAndPasteInput);
 
         setTopPaneConstraints();
         setConstraints();
@@ -166,6 +172,16 @@ public class Window extends JFrame {
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        layoutManager.setConstraints(jButtonClearAndPasteInput, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.weighty = 0.3;
@@ -185,6 +201,16 @@ public class Window extends JFrame {
         layoutManager.setConstraints(jLabelHeaders, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
+        layoutManager.setConstraints(jButtonResetHeaders, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
@@ -193,6 +219,16 @@ public class Window extends JFrame {
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new Insets(5, 5, 2, 5);
         layoutManager.setConstraints(jLabelResponseHeaders, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        layoutManager.setConstraints(jButtonCopyResponseHeaders, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -215,16 +251,6 @@ public class Window extends JFrame {
         layoutManager.setConstraints(jScrollPaneResponseHeaders, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.weighty = 0.0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
-        layoutManager.setConstraints(jButtonResetHeaders, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
@@ -233,6 +259,16 @@ public class Window extends JFrame {
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new Insets(5, 5, 2, 5);
         layoutManager.setConstraints(jLabelResult, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        layoutManager.setConstraints(jButtonCopyResponseContent, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
