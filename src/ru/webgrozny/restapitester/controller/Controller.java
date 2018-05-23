@@ -13,6 +13,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class Controller {
         setMethod(UserDataSaver.getInstance().getMethod());
         setInputJson(UserDataSaver.getInstance().getJson());
         setHeaders(UserDataSaver.getInstance().getHeaders());
+        disableForGetAndDelete();
     }
 
     public void addListener() {
@@ -78,6 +81,13 @@ public class Controller {
                 clipboard.setContents(content, null);
             }
         });
+
+        window.jComboBoxMethod.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                disableForGetAndDelete();
+            }
+        });
     }
 
     private JTextComponent[] getFields () {
@@ -88,6 +98,10 @@ public class Controller {
         for(JTextComponent component : getFields()) {
             component.setEnabled(enable);
         }
+    }
+
+    private void disableForGetAndDelete() {
+        window.jTextAreaInputJson.setEnabled(PostJsonSender.sendBody((String) window.jComboBoxMethod.getSelectedItem()));
     }
 
     private void setRequestMethods() {

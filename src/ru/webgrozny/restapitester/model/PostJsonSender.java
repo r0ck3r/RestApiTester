@@ -13,7 +13,11 @@ import java.util.Set;
 
 public class PostJsonSender {
     public static List<String> defaultHeaders = Arrays.asList(new String[] {"Content-type: application/json"});
-    public static List<String> methods = Arrays.asList(new String[] {"POST", "PUT"} );
+    public static List<String> methods = Arrays.asList(new String[] {"GET", "POST", "PUT", "DELETE"} );
+
+    public static boolean sendBody(String method) {
+        return method.equals("POST") || method.equals("PUT");
+    }
 
     public ServerAnswer send(String host, String json, int methodIndex, String headers) {
         if(host.length() == 0) {
@@ -51,10 +55,12 @@ public class PostJsonSender {
                     httpURLConnection.setRequestProperty(key, value);
                 }
             }
-            httpURLConnection.setRequestProperty("Content-length", length + "");
-            httpURLConnection.setDoOutput(true);
-            OutputStream outputStream = httpURLConnection.getOutputStream();
-            outputStream.write(data);
+            if(sendBody(methods.get(methodIndex))) {
+                httpURLConnection.setRequestProperty("Content-length", length + "");
+                httpURLConnection.setDoOutput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(data);
+            }
 
             Map<String, List<String>> headerFields = httpURLConnection.getHeaderFields();
             Set<String> keys = headerFields.keySet();
