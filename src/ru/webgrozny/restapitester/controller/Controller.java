@@ -22,6 +22,7 @@ public class Controller {
 
     public void start() {
         window.setVisible(true);
+        window.jSplitPane.setDividerLocation(0.5);
         setRequestMethods();
         addListener();
         setHost(UserDataSaver.getInstance().getHost());

@@ -28,6 +28,7 @@ public class Window extends JFrame {
     private JScrollPane jScrollPaneResponseHeaders = new JScrollPane(jTextAreaResponseHeaders);
     private GridBagLayout layoutManager;
     private JPanel jPanelTop = new JPanel();
+    public JSplitPane jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
     public Window() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -42,21 +43,20 @@ public class Window extends JFrame {
         layoutManager = new GridBagLayout();
         setLayout(layoutManager);
 
-        add(jScrollPaneInput);
-        add(jScrollPaneResult);
-        add(jLabelInput);
-        add(jLabelResult);
         add(jComboBoxMethod);
         add(jLabelMethod);
-        add(jLabelHeaders);
         add(jScrollPaneHeaders);
-        add(jButtonResetHeaders);
-        add(jLabelResponseHeaders);
-        add(jScrollPaneResponseHeaders);
         add(jPanelTop);
-        add(jButtonCopyResponseHeaders);
-        add(jButtonCopyResponseContent);
-        add(jButtonClearAndPasteInput);
+        add(jSplitPane);
+
+        JPanel topSubPanel = createTopJSplitPane();
+        JPanel bottomSubPanel = createBottomJSplitPane();
+
+        jSplitPane.add(topSubPanel);
+        jSplitPane.add(bottomSubPanel);
+        int max = jSplitPane.getMaximumDividerLocation();
+        int min = jSplitPane.getMinimumDividerLocation();
+        int size = jSplitPane.getDividerSize();
 
         setTopPaneConstraints();
         setConstraints();
@@ -129,6 +129,162 @@ public class Window extends JFrame {
         gridBagLayout.setConstraints(jButtonSend, gridBagConstraints);
     }
 
+    private JPanel createTopJSplitPane() {
+        JPanel jPanel = new JPanel();
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        jPanel.setLayout(gridBagLayout);
+
+        jPanel.add(jLabelHeaders);
+        jPanel.add(jButtonResetHeaders);
+        jPanel.add(jScrollPaneHeaders);
+
+        jPanel.add(jLabelResponseHeaders);
+        jPanel.add(jButtonCopyResponseHeaders);
+        jPanel.add(jScrollPaneResponseHeaders);
+
+        GridBagConstraints gridBagConstraints;
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+        gridBagLayout.setConstraints(jLabelHeaders, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+        gridBagLayout.setConstraints(jButtonResetHeaders, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagLayout.setConstraints(jScrollPaneHeaders, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+        gridBagLayout.setConstraints(jLabelResponseHeaders, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+        gridBagLayout.setConstraints(jButtonCopyResponseHeaders, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1;
+        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagLayout.setConstraints(jScrollPaneResponseHeaders, gridBagConstraints);
+
+        return jPanel;
+    }
+
+    private JPanel createBottomJSplitPane() {
+        JPanel jPanel = new JPanel();
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        jPanel.setLayout(gridBagLayout);
+
+        jPanel.add(jLabelInput);
+        jPanel.add(jButtonClearAndPasteInput);
+        jPanel.add(jScrollPaneInput);
+
+        jPanel.add(jLabelResult);
+        jPanel.add(jButtonCopyResponseContent);
+        jPanel.add(jScrollPaneResult);
+
+        GridBagConstraints gridBagConstraints;
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+        gridBagLayout.setConstraints(jLabelInput, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+        gridBagLayout.setConstraints(jButtonClearAndPasteInput, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1;
+        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagLayout.setConstraints(jScrollPaneInput, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+        gridBagLayout.setConstraints(jLabelResult, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+        gridBagLayout.setConstraints(jButtonCopyResponseContent, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1;
+        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagLayout.setConstraints(jScrollPaneResult, gridBagConstraints);
+
+        return jPanel;
+    }
+
     private void setConstraints() {
         GridBagConstraints gridBagConstraints;
 
@@ -136,7 +292,7 @@ public class Window extends JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         layoutManager.setConstraints(jPanelTop, gridBagConstraints);
@@ -162,122 +318,12 @@ public class Window extends JFrame {
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weighty = 0.0;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
-        layoutManager.setConstraints(jLabelInput, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.weighty = 0.0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
-        layoutManager.setConstraints(jButtonClearAndPasteInput, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weighty = 0.3;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
-        layoutManager.setConstraints(jScrollPaneInput, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weighty = 0.0;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
-        layoutManager.setConstraints(jLabelHeaders, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.weighty = 0.0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
-        layoutManager.setConstraints(jButtonResetHeaders, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.weighty = 0.0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
-        layoutManager.setConstraints(jLabelResponseHeaders, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.weighty = 0.0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
-        layoutManager.setConstraints(jButtonCopyResponseHeaders, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
-        layoutManager.setConstraints(jScrollPaneHeaders, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.weighty = 0.5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
-        layoutManager.setConstraints(jScrollPaneResponseHeaders, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weighty = 0.0;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
-        layoutManager.setConstraints(jLabelResult, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weighty = 0.0;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new Insets(5, 5, 2, 5);
-        layoutManager.setConstraints(jButtonCopyResponseContent, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.weighty = 0.5;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
-        layoutManager.setConstraints(jScrollPaneResult, gridBagConstraints);
+        layoutManager.setConstraints(jSplitPane, gridBagConstraints);
     }
 }
