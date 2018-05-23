@@ -1,6 +1,6 @@
 package ru.webgrozny.restapitester.controller;
 
-import ru.webgrozny.restapitester.model.PostJsonSender;
+import ru.webgrozny.restapitester.model.RequestSender;
 import ru.webgrozny.restapitester.model.ServerAnswer;
 import ru.webgrozny.restapitester.model.UserDataSaver;
 import ru.webgrozny.restapitester.view.Window;
@@ -47,7 +47,7 @@ public class Controller {
         window.jButtonResetHeaders.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setHeaders(PostJsonSender.defaultHeaders);
+                setHeaders(RequestSender.defaultHeaders);
             }
         });
 
@@ -91,7 +91,7 @@ public class Controller {
     }
 
     private JTextComponent[] getFields () {
-        return new JTextComponent[] {window.jTextFieldResult, window.jTextAreaResponseHeaders};
+        return new JTextComponent[] {window.jTextAreaResult, window.jTextAreaResponseHeaders};
     }
 
     private void setEnabledTextFields(boolean enable) {
@@ -101,11 +101,11 @@ public class Controller {
     }
 
     private void disableForGetAndDelete() {
-        window.jTextAreaInputJson.setEnabled(PostJsonSender.sendBody((String) window.jComboBoxMethod.getSelectedItem()));
+        window.jTextAreaInputJson.setEnabled(RequestSender.sendBody((String) window.jComboBoxMethod.getSelectedItem()));
     }
 
     private void setRequestMethods() {
-        for(String method : PostJsonSender.methods) {
+        for(String method : RequestSender.methods) {
             window.jComboBoxMethod.addItem(method);
         }
     }
@@ -131,11 +131,11 @@ public class Controller {
     }
 
     private String getResultText() {
-        return window.jTextFieldResult.getText();
+        return window.jTextAreaResult.getText();
     }
 
     private void setResultText(String text) {
-        window.jTextFieldResult.setText(text);
+        window.jTextAreaResult.setText(text);
     }
 
     private void setHost(String host) {
@@ -166,7 +166,7 @@ public class Controller {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                ServerAnswer result = new PostJsonSender().send(getHost(), getInputText(), getMethodIndex(), getHeaders());
+                ServerAnswer result = new RequestSender().send(getHost(), getInputText(), getMethodIndex(), getHeaders());
                 setResultText(result.getContent());
                 setResponseHeaders(result.getHeaders());
                 setEnabledTextFields(true);

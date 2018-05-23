@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PostJsonSender {
+public class RequestSender {
     public static List<String> defaultHeaders = Arrays.asList(new String[] {"Content-type: application/json"});
     public static List<String> methods = Arrays.asList(new String[] {"GET", "POST", "PUT", "DELETE"} );
 

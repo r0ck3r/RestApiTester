@@ -7,7 +7,7 @@ import java.awt.*;
 public class Window extends JFrame {
     public JTextArea jTextAreaInputJson = new JTextArea();
     public JTextField jTextFieldHost = new JTextField();
-    public JTextArea jTextFieldResult = new JTextArea();
+    public JTextArea jTextAreaResult = new JTextArea();
     public JButton jButtonSend = new JButton("Send");
     public JComboBox<String> jComboBoxMethod = new JComboBox<String>();
     public JTextArea jTextAreaHeaders = new JTextArea();
@@ -17,12 +17,12 @@ public class Window extends JFrame {
     public JButton jButtonCopyResponseContent = new JButton("Copy");
     public JButton jButtonClearAndPasteInput = new JButton("Clear and paste");
     private JLabel jLabelHost = new JLabel("API URL:");
-    private JLabel jLabelInput = new JLabel("Input JSON:");
+    private JLabel jLabelInput = new JLabel("Request body:");
     private JLabel jLabelResult = new JLabel("Answer from Server:");
     private JLabel jLabelMethod = new JLabel("Method:");
     private JLabel jLabelHeaders = new JLabel("Headers:");
     private JLabel jLabelResponseHeaders = new JLabel("Response headers:");
-    private JScrollPane jScrollPaneResult = new JScrollPane(jTextFieldResult);
+    private JScrollPane jScrollPaneResult = new JScrollPane(jTextAreaResult);
     private JScrollPane jScrollPaneInput = new JScrollPane(jTextAreaInputJson);
     private JScrollPane jScrollPaneHeaders = new JScrollPane(jTextAreaHeaders);
     private JScrollPane jScrollPaneResponseHeaders = new JScrollPane(jTextAreaResponseHeaders);
@@ -37,7 +37,7 @@ public class Window extends JFrame {
         setPosition();
 
         setTitle("RestApiTester");
-        jTextFieldResult.setEditable(false);
+        jTextAreaResult.setEditable(false);
         jTextAreaResponseHeaders.setEditable(false);
 
         layoutManager = new GridBagLayout();
@@ -62,7 +62,7 @@ public class Window extends JFrame {
         setConstraints();
 
         setContextMenuListener(jTextAreaInputJson);
-        setContextMenuListener(jTextFieldResult);
+        setContextMenuListener(jTextAreaResult);
         setContextMenuListener(jTextFieldHost);
         setContextMenuListener(jTextAreaResponseHeaders);
         setContextMenuListener(jTextAreaHeaders);

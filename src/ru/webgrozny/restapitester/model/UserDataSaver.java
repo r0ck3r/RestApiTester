@@ -71,7 +71,7 @@ public class UserDataSaver {
     }
 
     public List<String> getHeaders() {
-        return headersFromFile == null ? PostJsonSender.defaultHeaders : headersFromFile;
+        return headersFromFile == null ? RequestSender.defaultHeaders : headersFromFile;
     }
 
     public static UserDataSaver getInstance() {
