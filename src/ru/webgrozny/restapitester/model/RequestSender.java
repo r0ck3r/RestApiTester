@@ -81,7 +81,6 @@ public class RequestSender {
             }
             content = new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
             httpURLConnection.disconnect();
-            UserDataSaver.getInstance().saveData(host, json, methodIndex, usingHeaders);
         } catch (Exception e) {
             content = "Can't connect to \"" + host + "\"\r\n";
         }

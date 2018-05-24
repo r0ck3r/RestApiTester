@@ -1,4 +1,4 @@
-package ru.webgrozny.restapitester.view;
+package ru.webgrozny.restapitester.controller;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;

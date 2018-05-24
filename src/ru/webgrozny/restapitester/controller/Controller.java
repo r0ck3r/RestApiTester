@@ -1,40 +1,75 @@
 package ru.webgrozny.restapitester.controller;
 
-import ru.webgrozny.restapitester.model.RequestSender;
-import ru.webgrozny.restapitester.model.ServerAnswer;
-import ru.webgrozny.restapitester.model.UserDataSaver;
+import ru.webgrozny.restapitester.model.*;
 import ru.webgrozny.restapitester.view.Window;
 
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Controller {
-    Window window = new Window();
-    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    private Window window = new Window();
+    private Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    private AutoCompleteJComboBox autoCompleteJComboBox;
+    private AutoCompleteJComboBox autoCompleteJComboBoxProfiles;
+    private Storage storage = Storage.getInstance();
+    private History history = storage.getSavedContent().getHistory();
 
     public void start() {
         window.setVisible(true);
         window.jSplitPane.setDividerLocation(0.5);
-        setRequestMethods();
+        loadHistory();
+        loadProfiles();
+        autoCompleteJComboBox = new AutoCompleteJComboBox(window.jComboBoxHost);
+        autoCompleteJComboBoxProfiles = new AutoCompleteJComboBox(window.jComboBoxProfile);
+        loadRequestMethods();
+
         addListener();
-        setHost(UserDataSaver.getInstance().getHost());
-        setMethod(UserDataSaver.getInstance().getMethod());
-        setInputJson(UserDataSaver.getInstance().getJson());
-        setHeaders(UserDataSaver.getInstance().getHeaders());
+
+        setContextMenuListener(window.jTextAreaInputJson);
+        setContextMenuListener(window.jTextAreaResult);
+        setContextMenuListener(window.jTextFieldHost);
+        setContextMenuListener(window.jTextAreaResponseHeaders);
+        setContextMenuListener(window.jTextAreaHeaders);
+
+        setMethod(storage.getSavedContent().getActiveMethod());
+        setInputJson(storage.getSavedContent().getBody());
+        setHeaders(storage.getSavedContent().getHeaders());
+
         disableForGetAndDelete();
     }
 
-    public void addListener() {
+    private void loadProfiles() {
+        window.jComboBoxProfile.removeAllItems();
+        Set<String> profiles = storage.getSavedContent().getProfiles().keySet();
+        for(String profile : profiles) {
+            window.jComboBoxProfile.addItem(profile);
+        }
+        try {
+            window.jComboBoxProfile.setSelectedIndex(storage.getSavedContent().getSctiveProfile());
+        } catch (Exception e) {}
+
+    }
+
+    private void loadHistory() {
+        window.jComboBoxHost.setEditable(true);
+        window.jComboBoxHost.removeAllItems();
+        for(String item : history.getHistory()) {
+            window.jComboBoxHost.addItem(item);
+        }
+        window.jTextFieldHost = (JTextField) window.jComboBoxHost.getEditor().getEditorComponent();
+    }
+
+    private void addListener() {
         window.jButtonSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,7 +82,12 @@ public class Controller {
         window.jButtonResetHeaders.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setHeaders(RequestSender.defaultHeaders);
+                StringBuilder stringBuilder = new StringBuilder();
+                List<String> headers = RequestSender.defaultHeaders;
+                for(String header : headers) {
+                    stringBuilder.append(header).append("\r\n");
+                }
+                setHeaders(stringBuilder.toString());
             }
         });
 
@@ -88,6 +128,71 @@ public class Controller {
                 disableForGetAndDelete();
             }
         });
+
+        window.jButtonProfileSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String profileName = getProfileName();
+                Profile profile = getSelectedProfile();
+                saveProfile(profile);
+                storage.getSavedContent().getProfiles().put(getProfileName(), profile);
+                loadProfiles();
+                window.jComboBoxProfile.setSelectedItem(profileName);
+                storage.getSavedContent().setSctiveProfile(window.jComboBoxProfile.getSelectedIndex());
+                storage.save();
+                autoCompleteJComboBoxProfiles.reload();
+            }
+        });
+
+        window.jButtonProfileLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Profile profile = getSelectedProfile();
+                storage.getSavedContent().setSctiveProfile(window.jComboBoxProfile.getSelectedIndex());
+                storage.save();
+                loadProfile(profile);
+            }
+        });
+
+        window.jButtonProfileRemove.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = getProfileName();
+                storage.getSavedContent().getProfiles().remove(name);
+                storage.save();
+                loadProfiles();
+                window.jComboBoxProfile.setSelectedItem("");
+                autoCompleteJComboBoxProfiles.reload();
+            }
+        });
+    }
+
+    private void loadProfile(Profile profile) {
+        setInputJson(profile.getBody());
+        setHost(profile.getHost());
+        setMethod(profile.getMethod());
+        setHeaders(profile.getHeaders());
+    }
+
+    private void saveProfile(Profile profile) {
+        profile.setBody(getInputText());
+        profile.setHeaders(getHeaders());
+        profile.setHost(getHost());
+        profile.setMethod(getMethodIndex());
+    }
+
+    private Profile getSelectedProfile() {
+        String name = getProfileName();
+        Map<String, Profile> profiles = storage.getSavedContent().getProfiles();
+        Profile profile = profiles.get(name);
+        if(profile == null) {
+            profile = new Profile();
+        }
+        return profile;
+    }
+
+    private String getProfileName() {
+        return (String) window.jComboBoxProfile.getSelectedItem();
     }
 
     private JTextComponent[] getFields () {
@@ -104,7 +209,7 @@ public class Controller {
         window.jTextAreaInputJson.setEnabled(RequestSender.sendBody((String) window.jComboBoxMethod.getSelectedItem()));
     }
 
-    private void setRequestMethods() {
+    private void loadRequestMethods() {
         for(String method : RequestSender.methods) {
             window.jComboBoxMethod.addItem(method);
         }
@@ -150,12 +255,8 @@ public class Controller {
         window.jComboBoxMethod.setSelectedIndex(index);
     }
 
-    private void setHeaders(List<String> headers) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for(String header : headers) {
-            stringBuilder.append(header + "\r\n");
-        }
-        window.jTextAreaHeaders.setText(stringBuilder.toString());
+    private void setHeaders(String headers) {
+        window.jTextAreaHeaders.setText(headers);
     }
 
     private void setResponseHeaders(String responseHeaders) {
@@ -163,6 +264,7 @@ public class Controller {
     }
 
     private Thread sendJson() {
+        updateHistory();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -173,5 +275,20 @@ public class Controller {
             }
         };
         return new Thread(runnable);
+    }
+
+    private void setContextMenuListener(JTextComponent jTextComponent) {
+        new ContextMenu(jTextComponent);
+    }
+
+    private void updateHistory() {
+        history.save(getHost());
+        loadHistory();
+        autoCompleteJComboBox.reload();
+
+        storage.getSavedContent().setActiveMethod(getMethodIndex());
+        storage.getSavedContent().setHeaders(getHeaders());
+        storage.getSavedContent().setBody(getInputText());
+        storage.save();
     }
 }
