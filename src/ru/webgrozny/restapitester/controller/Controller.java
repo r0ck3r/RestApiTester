@@ -133,6 +133,9 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String profileName = getProfileName();
+                if(profileName == null) {
+                    return;
+                }
                 Profile profile = getSelectedProfile();
                 saveProfile(profile);
                 storage.getSavedContent().getProfiles().put(getProfileName(), profile);
