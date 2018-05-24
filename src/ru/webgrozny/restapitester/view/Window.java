@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Window extends JFrame {
-    public static final int TAB_SIZE = 4;
+    private static final int TAB_SIZE = 4;
 
     public JTextArea jTextAreaInputJson = new JTextArea();
     public JComboBox<String> jComboBoxHost = new JComboBox<>();
     public JTextField jTextFieldHost = new JTextField();
     public JTextArea jTextAreaResult = new JTextArea();
     public JButton jButtonSend = new JButton("Send");
-    public JComboBox<String> jComboBoxMethod = new JComboBox<String>();
+    public JComboBox<String> jComboBoxMethod = new JComboBox<>();
     public JTextArea jTextAreaHeaders = new JTextArea();
     public JButton jButtonResetHeaders = new JButton("Load default");
     public JTextArea jTextAreaResponseHeaders = new JTextArea();
@@ -19,7 +19,7 @@ public class Window extends JFrame {
     public JButton jButtonCopyResponseContent = new JButton("Copy");
     public JButton jButtonClearAndPasteInput = new JButton("Clear and paste");
     private JPanel jPanelProfile = new JPanel();
-    public JLabel jLabelProfile = new JLabel("Profile: ");
+    private JLabel jLabelProfile = new JLabel("Profile: ");
     public JComboBox<String> jComboBoxProfile = new JComboBox<>();
     public JButton jButtonProfileLoad = new JButton("Load");
     public JButton jButtonProfileSave = new JButton("Save");
@@ -120,13 +120,13 @@ public class Window extends JFrame {
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(5, 5, 5, 0);
         gridBagLayout.setConstraints(jButtonProfileRemove, gridBagConstraints);
     }
 
     private void fixTextAreaFonts() {
         Font set = jTextFieldHost.getFont();
-        Font font = new Font(Font.MONOSPACED, 0, set.getSize());
+        Font font = new Font(Font.MONOSPACED, Font.PLAIN, set.getSize());
 
         jTextAreaInputJson.setTabSize(4);
         jTextAreaInputJson.setFont(font);

@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.Set;
 
 public class RequestSender {
-    public static List<String> defaultHeaders = Arrays.asList(new String[] {"Content-type: application/json"});
-    public static List<String> methods = Arrays.asList(new String[] {"GET", "POST", "PUT", "DELETE"} );
+    public static List<String> defaultHeaders = Arrays.asList("Content-type: application/json");
+    public static List<String> methods = Arrays.asList("GET", "POST", "PUT", "DELETE");
 
     public static boolean sendBody(String method) {
-        return method.equals("POST") || method.equals("PUT");
+        return method != null && (method.equals("POST") || method.equals("PUT"));
     }
 
     public ServerAnswer send(String host, String json, int methodIndex, String headers) {
@@ -66,9 +66,9 @@ public class RequestSender {
             Set<String> keys = headerFields.keySet();
             for(String key : keys) {
                 if(key == null) {
-                    responseHeaders.append(headerFields.get(key).get(0));
+                    responseHeaders.append(headerFields.get(null).get(0));
                 } else {
-                    responseHeaders.append(key + ": " + headerFields.get(key).get(0));
+                    responseHeaders.append(key).append(": ").append(headerFields.get(key).get(0));
                 }
                 responseHeaders.append("\r\n");
             }
