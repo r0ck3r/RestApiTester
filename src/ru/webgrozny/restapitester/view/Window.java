@@ -1,5 +1,7 @@
 package ru.webgrozny.restapitester.view;
 
+import ru.webgrozny.swingcomponents.JComboTextField;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,8 +9,7 @@ public class Window extends JFrame {
     private static final int TAB_SIZE = 4;
 
     public JTextArea jTextAreaInputJson = new JTextArea();
-    public JComboBox<String> jComboBoxHost = new JComboBox<>();
-    public JTextField jTextFieldHost = new JTextField();
+    public JComboTextField jComboTextFieldHost = new JComboTextField();
     public JTextArea jTextAreaResult = new JTextArea();
     public JButton jButtonSend = new JButton("Send");
     public JComboBox<String> jComboBoxMethod = new JComboBox<>();
@@ -20,7 +21,8 @@ public class Window extends JFrame {
     public JButton jButtonClearAndPasteInput = new JButton("Clear and paste");
     private JPanel jPanelProfile = new JPanel();
     private JLabel jLabelProfile = new JLabel("Profile: ");
-    public JComboBox<String> jComboBoxProfile = new JComboBox<>();
+//    public JComboBox<String> jComboBoxProfile = new JComboBox<>();
+    public JComboTextField jComboBoxProfile = new JComboTextField();
     public JButton jButtonProfileLoad = new JButton("Load");
     public JButton jButtonProfileSave = new JButton("Save");
     public JButton jButtonProfileRemove = new JButton("Delete");
@@ -125,7 +127,7 @@ public class Window extends JFrame {
     }
 
     private void fixTextAreaFonts() {
-        Font set = jTextFieldHost.getFont();
+        Font set = jLabelHost.getFont();
         Font font = new Font(Font.MONOSPACED, Font.PLAIN, set.getSize());
 
         jTextAreaInputJson.setTabSize(4);
@@ -159,7 +161,7 @@ public class Window extends JFrame {
         jPanelTop.setLayout(gridBagLayout);
 
         jPanelTop.add(jLabelHost);
-        jPanelTop.add(jComboBoxHost);
+        jPanelTop.add(jComboTextFieldHost);
         jPanelTop.add(jButtonSend);
 
         GridBagConstraints gridBagConstraints;
@@ -181,7 +183,7 @@ public class Window extends JFrame {
         gridBagConstraints.weighty = 0.0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        gridBagLayout.setConstraints(jComboBoxHost, gridBagConstraints);
+        gridBagLayout.setConstraints(jComboTextFieldHost, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;

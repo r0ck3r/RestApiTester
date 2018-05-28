@@ -3,41 +3,33 @@ package ru.webgrozny.restapitester.controller;
 import ru.webgrozny.restapitester.model.*;
 import ru.webgrozny.restapitester.view.Window;
 
-import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.*;
-import java.io.IOException;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class Controller {
     private Window window = new Window();
     private Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-    private AutoCompleteJComboBox autoCompleteJComboBox;
-    private AutoCompleteJComboBox autoCompleteJComboBoxProfiles;
     private Storage storage = Storage.getInstance();
     private History history = storage.getSavedContent().getHistory();
 
     public void start() {
         window.setVisible(true);
         window.jSplitPane.setDividerLocation(0.5);
-        loadHistory();
         loadProfiles();
-        autoCompleteJComboBox = new AutoCompleteJComboBox(window.jComboBoxHost);
-        autoCompleteJComboBoxProfiles = new AutoCompleteJComboBox(window.jComboBoxProfile);
+        window.jComboTextFieldHost.setItems(history.getHistory());
         loadRequestMethods();
 
         addListener();
 
         setContextMenuListener(window.jTextAreaInputJson);
         setContextMenuListener(window.jTextAreaResult);
-        setContextMenuListener(window.jTextFieldHost);
+        setContextMenuListener(window.jComboTextFieldHost.getJTextField());
+        setContextMenuListener(window.jComboBoxProfile.getJTextField());
         setContextMenuListener(window.jTextAreaResponseHeaders);
         setContextMenuListener(window.jTextAreaHeaders);
 
@@ -49,24 +41,9 @@ public class Controller {
     }
 
     private void loadProfiles() {
-        window.jComboBoxProfile.removeAllItems();
-        Set<String> profiles = storage.getSavedContent().getProfiles().keySet();
-        for(String profile : profiles) {
-            window.jComboBoxProfile.addItem(profile);
-        }
-        try {
-            window.jComboBoxProfile.setSelectedIndex(storage.getSavedContent().getSctiveProfile());
-        } catch (Exception e) {}
-
-    }
-
-    private void loadHistory() {
-        window.jComboBoxHost.setEditable(true);
-        window.jComboBoxHost.removeAllItems();
-        for(String item : history.getHistory()) {
-            window.jComboBoxHost.addItem(item);
-        }
-        window.jTextFieldHost = (JTextField) window.jComboBoxHost.getEditor().getEditorComponent();
+        List<String> profiles = new ArrayList<>();
+        profiles.addAll(storage.getSavedContent().getProfiles().keySet());
+        window.jComboBoxProfile.setItems(profiles);
     }
 
     private void addListener() {
@@ -112,7 +89,6 @@ public class Controller {
             window.jComboBoxProfile.setSelectedItem(profileName);
             storage.getSavedContent().setSctiveProfile(window.jComboBoxProfile.getSelectedIndex());
             storage.save();
-            autoCompleteJComboBoxProfiles.reload();
         });
 
         window.jButtonProfileLoad.addActionListener(e -> {
@@ -128,7 +104,6 @@ public class Controller {
             storage.save();
             loadProfiles();
             window.jComboBoxProfile.setSelectedItem("");
-            autoCompleteJComboBoxProfiles.reload();
         });
     }
 
@@ -195,7 +170,7 @@ public class Controller {
     }
 
     private String getHost() {
-        return window.jTextFieldHost.getText();
+        return window.jComboTextFieldHost.getJTextField().getText();
     }
 
     private int getMethodIndex() {
@@ -219,7 +194,7 @@ public class Controller {
     }
 
     private void setHost(String host) {
-        window.jTextFieldHost.setText(host);
+        window.jComboTextFieldHost.getJTextField().setText(host);
     }
 
     private void setInputJson(String json) {
@@ -255,8 +230,7 @@ public class Controller {
 
     private void updateHistory() {
         history.save(getHost());
-        loadHistory();
-        autoCompleteJComboBox.reload();
+        window.jComboTextFieldHost.setItems(history.getHistory());
 
         storage.getSavedContent().setActiveMethod(getMethodIndex());
         storage.getSavedContent().setHeaders(getHeaders());
