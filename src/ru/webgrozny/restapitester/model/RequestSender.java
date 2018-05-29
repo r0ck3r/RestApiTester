@@ -6,10 +6,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RequestSender {
     public static List<String> defaultHeaders = Arrays.asList("Content-type: application/json");
@@ -21,9 +18,10 @@ public class RequestSender {
 
     public ServerAnswer send(String host, String json, int methodIndex, String headers) {
         if(host.length() == 0) {
-            return new ServerAnswer("Host is not defined!", "");
+            return new ServerAnswer("Host is not defined!", "", .0);
         }
         String content;
+        double result = .0;
         StringBuilder responseHeaders = new StringBuilder();
         List<String> usingHeaders = defaultHeaders;
         try {
@@ -37,7 +35,7 @@ public class RequestSender {
         }
 
         try {
-
+            long timeStart = Calendar.getInstance().getTimeInMillis();
             if(!host.startsWith("http://") && !host.startsWith("https://")) {
                 host = "http://" + host;
             }
@@ -81,9 +79,13 @@ public class RequestSender {
             }
             content = new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
             httpURLConnection.disconnect();
+            long timeEnd = Calendar.getInstance().getTimeInMillis();
+
+            long resultMs = timeEnd - timeStart;
+            result = resultMs / 1000.;
         } catch (Exception e) {
             content = "Can't connect to \"" + host + "\"\r\n";
         }
-        return new ServerAnswer(content, responseHeaders.toString());
+        return new ServerAnswer(content, responseHeaders.toString(), result);
     }
 }

@@ -213,12 +213,20 @@ public class Controller {
         window.jTextAreaResponseHeaders.setText(responseHeaders);
     }
 
+    private void setTime(double time) {
+        window.jLabelStatus.setText("");
+        if ( time > .0) {
+            window.jLabelStatus.setText(String.format("Execution time: %.3f", time));
+        }
+    }
+
     private Thread sendJson() {
         updateHistory();
         Runnable runnable = () -> {
             ServerAnswer result = new RequestSender().send(getHost(), getInputText(), getMethodIndex(), getHeaders());
             setResultText(result.getContent());
             setResponseHeaders(result.getHeaders());
+            setTime(result.getTime());
             setEnabledTextFields(true);
         };
         return new Thread(runnable);

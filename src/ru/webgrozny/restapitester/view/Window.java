@@ -21,11 +21,11 @@ public class Window extends JFrame {
     public JButton jButtonClearAndPasteInput = new JButton("Clear and paste");
     private JPanel jPanelProfile = new JPanel();
     private JLabel jLabelProfile = new JLabel("Profile: ");
-//    public JComboBox<String> jComboBoxProfile = new JComboBox<>();
     public JComboTextField jComboBoxProfile = new JComboTextField();
     public JButton jButtonProfileLoad = new JButton("Load");
     public JButton jButtonProfileSave = new JButton("Save");
     public JButton jButtonProfileRemove = new JButton("Delete");
+    public JLabel jLabelStatus = new JLabel();
     private JLabel jLabelHost = new JLabel("API URL:");
     private JLabel jLabelInput = new JLabel("Request body:");
     private JLabel jLabelResult = new JLabel("Answer from Server:");
@@ -46,20 +46,35 @@ public class Window extends JFrame {
         setPosition();
         setTitle("RestApiTester");
 
+        setLayout(new BorderLayout());
 
         jComboBoxProfile.setEditable(true);
         jTextAreaResult.setEditable(false);
         jTextAreaResponseHeaders.setEditable(false);
 
         layoutManager = new GridBagLayout();
-        setLayout(layoutManager);
+        JPanel jPanel = new JPanel();
+        add(jPanel, BorderLayout.CENTER);
 
-        add(jComboBoxMethod);
-        add(jLabelMethod);
-        add(jScrollPaneHeaders);
-        add(jPanelTop);
-        add(jSplitPane);
-        add(jPanelProfile);
+        JPanel jPanelStatus = new JPanel();
+        jPanelStatus.add(jLabelStatus);
+        GridBagLayout gridBagLayoutStatus = new GridBagLayout();
+        jPanelStatus.setLayout(gridBagLayoutStatus);
+        GridBagConstraints gridBagConstraintsStatus = new GridBagConstraints();
+        gridBagConstraintsStatus.anchor = GridBagConstraints.LINE_END;
+        gridBagConstraintsStatus.weightx = 1.0;
+        gridBagConstraintsStatus.insets = new Insets(2, 5, 2, 5);
+        gridBagLayoutStatus.setConstraints(jLabelStatus, gridBagConstraintsStatus);
+        add(jPanelStatus, BorderLayout.SOUTH);
+
+        jPanel.setLayout(layoutManager);
+
+        jPanel.add(jComboBoxMethod);
+        jPanel.add(jLabelMethod);
+        jPanel.add(jScrollPaneHeaders);
+        jPanel.add(jPanelTop);
+        jPanel.add(jSplitPane);
+        jPanel.add(jPanelProfile);
         configProfilePane();
 
         jSplitPane.add(createTopJSplitPane());
